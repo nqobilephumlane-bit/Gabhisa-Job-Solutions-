@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gabhisa Job Solutions</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f5f5f5; color: #333; }
+    header { background: #1e40af; color: white; padding: 20px; text-align: center; }
+    .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+    .section { background: white; margin: 20px 0; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    h2 { color: #1e40af; margin-top: 0; }
+    .job-card, .service-card { border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 6px; }
+    .job-card h3, .service-card h3 { margin: 0 0 10px 0; color: #1e40af; }
+    .job-card ul { margin: 10px 0; padding-left: 20px; }
+    .btn { display: inline-block; background: #25D366; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; margin-top: 10px; }
+    .btn:hover { opacity: 0.9; }
+    footer { text-align: center; padding: 20px; color: #666; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Gabhisa Job Solutions</h1>
+    <p>Find jobs and services fast</p>
+  </header>
+
+  <div class="container">
+    <section id="jobs" class="section">
+      <h2>Latest Job Advertisements</h2>
+      <div id="jobs-list">Loading jobs...</div>
+    </section>
+
+    <section id="services" class="section">
+      <h2>Our Services</h2>
+      <div id="services-list">Loading services...</div>
+    </section>
+
+    <section class="section">
+      <h2>Contact Us</h2>
+      <p>WhatsApp: 071 843 4547</p>
+      <p>Email: info@gabhisa.co.za</p>
+    </section>
+  </div>
+
+  <footer>
+    <p>© 2026 Gabhisa Job Solutions. All rights reserved.</p>
+  </footer>
+
+  <script>
+    async function loadData() {
+      try {
+        // Load jobs
+        const jobsRes = await fetch('/_data/jobs/');
+        if (jobsRes.ok) {
+          const jobs = await jobsRes.json();
+          const jobsList = document.getElementById('jobs-list');
+          jobsList.innerHTML = '';
+          
+          for (let file of jobs) {
+            const job = await fetch(file.download_url).then(r => r.json());
+            jobsList.innerHTML += `
+              <div class="job-card">
+                <h3>${job.title}</h3>
+                <ul>${job.requirements.map(r => `<li>${r}</li>`).join('')}</ul>
+              </div>
+            `;
+          }
+        } else {
+          document.getElementById('jobs-list').innerHTML = '<p>No jobs posted yet.</p>';
+        }
+
+        // Load services
+        const servicesRes = await fetch('/_data/services/');
+        if (servicesRes.ok) {
+          const services = await servicesRes.json();
+          const servicesList = document.getElementById('services-list');
+          servicesList.innerHTML = '';
+          
+          for (let file of services) {
+            const service = await fetch(file.download_url).then(r => r.json());
+            servicesList.innerHTML += `
+              <div class="service-card">
+                <h3>${service.name} - R${service.price}</h3>
+                <a class="btn" href="https://wa.me/27718434547?text=${encodeURIComponent(service.wa_msg)}">
+                  Order via WhatsApp
+                </a>
+              </div>
+            `;
+          }
+        } else {
+          document.getElementById('services-list').innerHTML = '<p>No services available yet.</p>';
+        }
+      } catch (err) {
+        console.error('Error loading data:', err);
+        document.getElementById('jobs-list').innerHTML = '<p>Error loading jobs.</p>';
+        document.getElementById('services-list').innerHTML = '<p>Error loading services.</p>';
+      }
+    }
+    
+    loadData();
+  </script>
+</body>
+</html>
