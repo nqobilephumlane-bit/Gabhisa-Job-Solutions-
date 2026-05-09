@@ -2,25 +2,21 @@ backend:
   name: git-gateway
   branch: main
 
-media_folder: "images"
-public_folder: "/images"
+media_folder: "public/uploads"
+public_folder: "/uploads"
 
 collections:
     - name: "jobs"
     label: "Jobs"
-    folder: "_data/jobs"
+    folder: "content/jobs"
     create: true
-    slug: "{{slug}}"
     fields:
             - {label: "Title", name: "title", widget: "string"}
-            -{label: "Requirements", name: "requirements", widget: "list", field: {label: "Requirement", name: "item", widget: "string"}}
-
+            - {label: "Body", name: "body", widget: "markdown"}
     - name: "services"
     label: "Services"
-    folder: "_data/services"
+    folder: "content/services"
     create: true
-    slug: "{{slug}}"
     fields:
-            - {label: "Name", name: "name", widget: "string"}
-            - {label: "Price", name: "price", widget: "number"}
-            - {label: "WhatsApp Message", name: "wa_msg", widget: "string"}
+            - {label: "Title", name: "title", widget: "string"}
+            - {label: "Body", name: "body", widget: "markdown"}
