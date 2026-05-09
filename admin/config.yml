@@ -13,7 +13,7 @@ collections:
     slug: "{{slug}}"
     fields:
             - {label: "Title", name: "title", widget: "string"}
-            - {label: "Requirements", name: "requirements", widget: "list", field: {label: "Requirement", name: "item", widget: "string"}}
+            -{label: "Requirements", name: "requirements", widget: "list", field: {label: "Requirement", name: "item", widget: "string"}}
 
     - name: "services"
     label: "Services"
